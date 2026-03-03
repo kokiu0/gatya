@@ -10,6 +10,7 @@ body{
   font-family:sans-serif;
   color:white;
   text-align:center;
+  overflow-x:hidden;
 }
 
 h1{ margin-top:30px; }
@@ -46,10 +47,20 @@ button:hover{ transform:scale(1.1); }
 .star2{ border:2px solid #aaa; }
 .star3{ border:2px solid #4fc3f7; }
 .star4{ border:2px solid gold; box-shadow:0 0 15px gold; }
+.star5{
+  border:2px solid hotpink;
+  box-shadow:0 0 25px magenta;
+  animation:rainbow 1s infinite linear;
+}
 
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(20px);}
   to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes rainbow{
+  0%{filter:hue-rotate(0deg);}
+  100%{filter:hue-rotate(360deg);}
 }
 
 .loading{
@@ -74,69 +85,18 @@ button:hover{ transform:scale(1.1); }
 <div id="result"></div>
 
 <script>
-// ⭐2（21種類）
+
+// ⭐2（21種）
 const star2 = [
 "a","b","c","d","e","f","g","h","i","j",
 "k","l","m","n","o","p","q","r","s","t","u"
 ];
 
-// ⭐3（21種類）
+// ⭐3（21種）
 const star3 = [
 "a'","b'","c'","d'","e'","f'","g'","h'","i'","j'",
 "k'","l'","m'","n'","o'","p'","q'","r'","s'","t'","u'"
 ];
 
-// ⭐4（45種類）
-const star4 = Array.from({length:45}, (_,i)=>"SSR_"+(i+1));
-
-function getRarity(){
-  const rand = Math.random()*100;
-  if(rand < 67) return 2;      // 67%
-  if(rand < 97) return 3;      // 30%
-  return 4;                    // 3%
-}
-
-function draw(){
-  const rarity = getRarity();
-  let pool;
-  if(rarity === 2) pool = star2;
-  if(rarity === 3) pool = star3;
-  if(rarity === 4) pool = star4;
-
-  const name = pool[Math.floor(Math.random()*pool.length)];
-  return {rarity,name};
-}
-
-function singleGacha(){
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "<div class='loading'>ガチャ中...</div>";
-  setTimeout(()=>{
-    const char = draw();
-    resultDiv.innerHTML = createCard(char);
-  },1000);
-}
-
-function tenGacha(){
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "<div class='loading'>10連ガチャ中...</div>";
-  setTimeout(()=>{
-    let output = "";
-    for(let i=0;i<10;i++){
-      output += createCard(draw());
-    }
-    resultDiv.innerHTML = output;
-  },1500);
-}
-
-function createCard(char){
-  return `
-    <div class="card star${char.rarity}">
-      <div>★${char.rarity}</div>
-      <div>${char.name}</div>
-    </div>
-  `;
-}
-</script>
-
-</body>
-</html>
+// ⭐4（45種）
+const star4 = Array.from({l
