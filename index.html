@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Simple Gacha Game</title>
+<title>Gacha Game</title>
 <style>
 body{
   margin:0;
@@ -12,9 +12,7 @@ body{
   text-align:center;
 }
 
-h1{
-  margin-top:30px;
-}
+h1{ margin-top:30px; }
 
 button{
   padding:12px 25px;
@@ -27,29 +25,27 @@ button{
   transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.1);
-}
+button:hover{ transform:scale(1.1); }
 
 #result{
   margin-top:30px;
-  font-size:24px;
+  font-size:22px;
   min-height:80px;
 }
 
 .card{
   display:inline-block;
   padding:15px;
-  margin:10px;
+  margin:8px;
   border-radius:10px;
   background:rgba(255,255,255,0.1);
   backdrop-filter:blur(5px);
   animation:fadeIn 0.5s ease;
 }
 
-.star3{ border:2px solid #aaa; }
-.star4{ border:2px solid #4fc3f7; }
-.star5{ border:2px solid gold; box-shadow:0 0 15px gold; }
+.star2{ border:2px solid #aaa; }
+.star3{ border:2px solid #4fc3f7; }
+.star4{ border:2px solid gold; box-shadow:0 0 15px gold; }
 
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(20px);}
@@ -78,26 +74,37 @@ button:hover{
 <div id="result"></div>
 
 <script>
-const characters = [
-  {name:"スライム", rarity:3},
-  {name:"剣士", rarity:3},
-  {name:"魔法使い", rarity:4},
-  {name:"ドラゴンナイト", rarity:4},
-  {name:"神龍", rarity:5}
+// ⭐2（21種類）
+const star2 = [
+"a","b","c","d","e","f","g","h","i","j",
+"k","l","m","n","o","p","q","r","s","t","u"
 ];
 
-function getRandom(){
+// ⭐3（21種類）
+const star3 = [
+"a'","b'","c'","d'","e'","f'","g'","h'","i'","j'",
+"k'","l'","m'","n'","o'","p'","q'","r'","s'","t'","u'"
+];
+
+// ⭐4（45種類）
+const star4 = Array.from({length:45}, (_,i)=>"SSR_"+(i+1));
+
+function getRarity(){
   const rand = Math.random()*100;
-  if(rand < 60) return 3;       // 60%
-  if(rand < 90) return 4;       // 30%
-  return 5;                     // 10%
+  if(rand < 67) return 2;      // 67%
+  if(rand < 97) return 3;      // 30%
+  return 4;                    // 3%
 }
 
 function draw(){
-  const rarity = getRandom();
-  const pool = characters.filter(c => c.rarity === rarity);
-  const char = pool[Math.floor(Math.random()*pool.length)];
-  return char;
+  const rarity = getRarity();
+  let pool;
+  if(rarity === 2) pool = star2;
+  if(rarity === 3) pool = star3;
+  if(rarity === 4) pool = star4;
+
+  const name = pool[Math.floor(Math.random()*pool.length)];
+  return {rarity,name};
 }
 
 function singleGacha(){
@@ -115,8 +122,7 @@ function tenGacha(){
   setTimeout(()=>{
     let output = "";
     for(let i=0;i<10;i++){
-      const char = draw();
-      output += createCard(char);
+      output += createCard(draw());
     }
     resultDiv.innerHTML = output;
   },1500);
