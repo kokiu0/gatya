@@ -99,4 +99,72 @@ const star3 = [
 ];
 
 // ⭐4（45種）
-const star4 = Array.from({l
+const star4 = Array.from({length:45}, (_,i)=>"SSR_"+(i+1));
+
+// ⭐5（単発限定 5種）
+const star5 = ["LIMITED_X","LIMITED_Y","LIMITED_Z","LIMITED_Ω","LIMITED_Λ"];
+
+function getRarity(isSingle){
+  const rand = Math.random()*100;
+
+  if(isSingle){
+    if(rand < 66) return 2;      // 66%
+    if(rand < 96) return 3;      // 30%
+    if(rand < 99) return 4;      // 3%
+    return 5;                    // 1%
+  }else{
+    if(rand < 67) return 2;
+    if(rand < 97) return 3;
+    return 4;                    // ⭐5なし
+  }
+}
+
+function draw(isSingle){
+  const rarity = getRarity(isSingle);
+  let pool;
+
+  if(rarity === 2) pool = star2;
+  if(rarity === 3) pool = star3;
+  if(rarity === 4) pool = star4;
+  if(rarity === 5) pool = star5;
+
+  const name = pool[Math.floor(Math.random()*pool.length)];
+  return {rarity,name};
+}
+
+function singleGacha(){
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "<div class='loading'>ガチャ中...</div>";
+
+  setTimeout(()=>{
+    const char = draw(true);
+    resultDiv.innerHTML = createCard(char);
+  },1200);
+}
+
+function tenGacha(){
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "<div class='loading'>10連ガチャ中...</div>";
+
+  setTimeout(()=>{
+    let output = "";
+    for(let i=0;i<10;i++){
+      output += createCard(draw(false));
+    }
+    resultDiv.innerHTML = output;
+  },1500);
+}
+
+function createCard(char){
+  return `
+    <div class="card star${char.rarity}">
+      <div>★${char.rarity}</div>
+      <div>${char.name}</div>
+    </div>
+  `;
+}
+
+</script>
+
+</body>
+</html>
